@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Improved WayBiz Bank Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <div class="logo">WayBiz Bank</div>
+            <div class="user-info">
+                <div class="user-avatar">AS</div>
+                <span>Anton Stephens</span>
+            </div>
+        </div>
+        <h2 class="section-title">Balances</h2>
+        <div class="balances" id="balances">
+            <!-- Balances will be inserted here -->
+        </div>
+        <div class="activities-rates">
+            <div class="activities">
+                <h2 class="section-title">Activities</h2>
+                <div id="activities">
+                    <!-- Activities will be inserted here -->
+                </div>
+                <a href="#" style="color: var(--primary-color); text-decoration: none; display: inline-block; margin-top: 15px;">View all activities</a>
+            </div>
+            <div class="rates">
+                <h2 class="section-title">Rates</h2>
+                <div class="rate-display">USD 1 = 4,069.70 KHR</div>
+                <button class="button" id="sendMoneyBtn">Send money</button>
+                <button class="button secondary">Invite & earn</button>
+                <button class="button tertiary" id="recipientsBtn">Recipients</button>
+            </div>
+        </div>
+        <div class="jars">
+            <h2 class="section-title">Jars</h2>
+            <div class="jar-cards" id="jars">
+                <!-- Jars will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Send Money Modal -->
+    <div id="sendMoneyModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 class="section-title">Send Money</h2>
+            <div class="input-group">
+                <label for="recipientInput">Recipient</label>
+                <input type="text" id="recipientInput" placeholder="Enter email or username">
+            </div>
+            <button class="button">Continue</button>
+        </div>
+    </div>
+
+    <!-- Recipients Modal -->
+    <div id="recipientsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 class="section-title">Account Details</h2>
+            <p><strong>Account Name:</strong> Anton Stephens</p>
+            <p><strong>Account Number:</strong> 9600000653561793</p>
+            <p><strong>Routing Number:</strong> 084009519</p>
+            <p><strong>Bank Name:</strong> WayBiz Bank</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
