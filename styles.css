@@ -282,6 +282,18 @@ body {
     font-size: 1.2em;
 }
 
+#googleAuthModal .modal-content {
+    max-width: 400px;
+}
+
+#googleAuthModal .input-group {
+    margin-bottom: 20px;
+}
+
+#googleAuthModal .button {
+    width: 100%;
+}
+
 @media (max-width: 768px) {
     .activities-rates {
         grid-template-columns: 1fr;
