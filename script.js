@@ -1,3 +1,5 @@
+console.log("Script started loading");
+
 // Sample data (all set to zero)
 const balances = [
     { currency: 'USD', amount: 0.00, equivalent: 0.00, icon: 'dollar-sign', flag: '🇺🇸' },
@@ -15,7 +17,12 @@ const jars = [
 ];
 
 function displayBalances() {
+    console.log("Displaying balances");
     const balancesContainer = document.getElementById('balances');
+    if (!balancesContainer) {
+        console.error("Balances container not found");
+        return;
+    }
     balancesContainer.innerHTML = balances.map(balance => `
         <div class="balance-card">
             <h3><i class="fas fa-${balance.icon}"></i> <span class="currency-flag">${balance.flag}</span>${balance.currency}</h3>
@@ -26,7 +33,12 @@ function displayBalances() {
 }
 
 function displayActivities() {
+    console.log("Displaying activities");
     const activitiesContainer = document.getElementById('activities');
+    if (!activitiesContainer) {
+        console.error("Activities container not found");
+        return;
+    }
     if (activities.length === 0) {
         activitiesContainer.innerHTML = '<p>No recent activities</p>';
     } else {
@@ -42,7 +54,12 @@ function displayActivities() {
 }
 
 function displayJars() {
+    console.log("Displaying jars");
     const jarsContainer = document.getElementById('jars');
+    if (!jarsContainer) {
+        console.error("Jars container not found");
+        return;
+    }
     jarsContainer.innerHTML = jars.map(jar => `
         <div class="jar-card">
             <h3><i class="fas fa-${jar.icon}"></i> ${jar.name}</h3>
@@ -58,86 +75,118 @@ function getFlagForCurrency(currency) {
 }
 
 function refreshDashboard() {
+    console.log("Refreshing dashboard");
     displayBalances();
     displayActivities();
     displayJars();
 }
 
 // Modal functionality
-const sendMoneyBtn = document.getElementById("sendMoneyBtn");
-const recipientsBtn = document.getElementById("recipientsBtn");
-const sendMoneyModal = document.getElementById("sendMoneyModal");
-const recipientsModal = document.getElementById("recipientsModal");
-const closeBtns = document.getElementsByClassName("close");
+let sendMoneyBtn, recipientsBtn, sendMoneyModal, recipientsModal, closeBtns;
+
+function initializeModalElements() {
+    console.log("Initializing modal elements");
+    sendMoneyBtn = document.getElementById("sendMoneyBtn");
+    recipientsBtn = document.getElementById("recipientsBtn");
+    sendMoneyModal = document.getElementById("sendMoneyModal");
+    recipientsModal = document.getElementById("recipientsModal");
+    closeBtns = document.getElementsByClassName("close");
+
+    if (!sendMoneyBtn) console.error("Send Money button not found");
+    if (!recipientsBtn) console.error("Recipients button not found");
+    if (!sendMoneyModal) console.error("Send Money modal not found");
+    if (!recipientsModal) console.error("Recipients modal not found");
+    if (closeBtns.length === 0) console.error("Close buttons not found");
+}
 
 function openModal(modal) {
-    modal.style.display = "block";
+    if (modal) modal.style.display = "block";
 }
 
 function closeModal(modal) {
-    modal.style.display = "none";
+    if (modal) modal.style.display = "none";
 }
 
 function closeAllModals() {
-    sendMoneyModal.style.display = "none";
-    recipientsModal.style.display = "none";
+    if (sendMoneyModal) sendMoneyModal.style.display = "none";
+    if (recipientsModal) recipientsModal.style.display = "none";
 }
 
-sendMoneyBtn.onclick = () => openModal(sendMoneyModal);
-recipientsBtn.onclick = () => openModal(recipientsModal);
-
-for (let closeBtn of closeBtns) {
-    closeBtn.onclick = closeAllModals;
+// Simple Password Authentication
+function createAuthModal() {
+    console.log("Creating Auth Modal");
+    const authModal = document.createElement('div');
+    authModal.id = 'authModal';
+    authModal.className = 'modal';
+    authModal.innerHTML = `
+        <div class="modal-content">
+            <h2 class="section-title">Login</h2>
+            <div class="input-group">
+                <label for="password">Enter Password:</label>
+                <input type="password" id="passwordInput" placeholder="Enter your password">
+            </div>
+            <button class="button" id="submitPassword">Login</button>
+        </div>
+    `;
+    document.body.appendChild(authModal);
+    return authModal;
 }
 
-window.onclick = function(event) {
-    if (event.target == sendMoneyModal || event.target == recipientsModal) {
-        closeAllModals();
-    }
+function showAuthModal(modal) {
+    console.log("Showing Auth Modal");
+    if (modal) modal.style.display = "block";
 }
 
-// Initialize the dashboard
-document.addEventListener('DOMContentLoaded', function() {
+function hideAuthModal(modal) {
+    console.log("Hiding Auth Modal");
+    if (modal) modal.style.display = "none";
+}
+
+function validatePassword(password) {
+    // For demo purposes, let's use a simple password
+    return password === "Strong123$&@";
+}
+
+function initializeDashboard() {
+    console.log("Initializing dashboard");
     refreshDashboard();
+}
 
-    // Add any additional initialization code here
-    // For example, you could set up event listeners for other interactive elements
+// Main initialization
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOM fully loaded");
+    initializeModalElements();
+    const authModal = createAuthModal();
     
-    // Example: Add event listener for the "Continue" button in the Send Money modal
-    const continueBtn = document.querySelector('#sendMoneyModal .button');
-    if (continueBtn) {
-        continueBtn.addEventListener('click', function() {
-            const recipientInput = document.getElementById('recipientInput');
-            console.log('Sending money to:', recipientInput.value);
-            // Add your logic here for handling the money sending process
-            closeModal(sendMoneyModal);
+    showAuthModal(authModal);
+
+    if (sendMoneyBtn) sendMoneyBtn.onclick = () => openModal(sendMoneyModal);
+    if (recipientsBtn) recipientsBtn.onclick = () => openModal(recipientsModal);
+
+    for (let closeBtn of closeBtns) {
+        closeBtn.onclick = closeAllModals;
+    }
+
+    window.onclick = function(event) {
+        if (event.target == sendMoneyModal || event.target == recipientsModal) {
+            closeAllModals();
+        }
+    }
+
+    const submitPasswordBtn = document.getElementById('submitPassword');
+    if (submitPasswordBtn) {
+        submitPasswordBtn.addEventListener('click', function() {
+            const password = document.getElementById('passwordInput').value;
+            if (validatePassword(password)) {
+                hideAuthModal(authModal);
+                initializeDashboard();
+            } else {
+                alert("Invalid password. Please try again.");
+            }
         });
+    } else {
+        console.error("Submit Password button not found");
     }
 });
 
-// You can add more functions here as needed for additional functionality
-// For example, functions to handle actual money transfers, update balances, etc.
-
-function updateBalance(currency, amount) {
-    const balance = balances.find(b => b.currency === currency);
-    if (balance) {
-        balance.amount += amount;
-        balance.equivalent = balance.amount * 4069.70; // Using the rate from the HTML
-        refreshDashboard();
-    }
-}
-
-function addActivity(description, currency, amount, type, status = 'completed') {
-    activities.unshift({
-        description,
-        currency,
-        amount,
-        type,
-        status
-    });
-    refreshDashboard();
-}
-
-// Example usage:
-// updateBalance('USD', 100);
-// addActivity('Received payment', 'USD', 100, 'Received');
+console.log("Script finished loading");
